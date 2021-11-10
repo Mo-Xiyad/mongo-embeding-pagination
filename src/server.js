@@ -5,6 +5,12 @@ import cors from "cors";
 
 import postsRouter from "./services/posts/index.js";
 
+import {
+  notFoundHandler,
+  badRequestHandler,
+  genericErrorHandler,
+} from "./errorHandlers.js";
+
 const server = express();
 const port = process.env.PORT || 3001;
 
@@ -15,9 +21,13 @@ server.use(express.json());
 
 // ******************************** ROUTES ********************************
 
-server.use("posts/", postsRouter);
+server.use("/posts", postsRouter);
 
 // ******************************** ERROR HANDLERS ********************************
+
+server.use(notFoundHandler);
+server.use(badRequestHandler);
+server.use(genericErrorHandler);
 
 mongoose.connect(process.env.MONGODB_CONNECTION);
 
