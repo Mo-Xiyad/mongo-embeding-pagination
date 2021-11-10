@@ -39,6 +39,7 @@ router
 
 router
   .route("/:postId/comments/:commentId")
+  .get(CommentHandler.getCommentsById)
   .put(CommentHandler.updateCommentsById)
   .delete(CommentHandler.deleteCommentsById);
 

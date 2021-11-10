@@ -43,8 +43,30 @@ const createComments = async (req, res, next) => {
     next(error);
   }
 };
+
 const getCommentsById = async (req, res, next) => {
   try {
+    const post = await PostModel.findById(req.params.postId);
+    if (post) {
+      const commentWithId = post.comments.find(
+        (comment) => comment._id.toString() === req.params.commentId
+      );
+      if (commentWithId) {
+        res.send(commentWithId);
+      } else {
+        next(
+          createHttpError(
+            404,
+            `Comment with id ${req.params.commentId} not found!`
+          )
+        );
+      }
+    } else {
+      console.log(error);
+      next(
+        createHttpError(404, `Post with id ${req.params.postId} not found!`)
+      );
+    }
   } catch (error) {
     console.log(error);
     next(error);
