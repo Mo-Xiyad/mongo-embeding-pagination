@@ -1,8 +1,10 @@
 import express from "express";
-import Handler from "./handlers.js";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import { v2 as cloudinary } from "cloudinary";
 import multer from "multer";
+
+import Handler from "./handlers.js";
+import CommentHandler from "../comments/handelers.js";
 
 const router = express.Router();
 
@@ -27,5 +29,17 @@ router.put(
   multer({ storage: cloudinaryStorage }).single("cover"),
   Handler.uploadImage
 );
+
+// ******************************* COMMENTS ****************************
+
+router
+  .route("/:postId/comments")
+  .get(CommentHandler.getComments)
+  .post(CommentHandler.createComments);
+
+router
+  .route("/:postId/comments/:commentId")
+  .put(CommentHandler.updateCommentsById)
+  .delete(CommentHandler.deleteCommentsById);
 
 export default router;

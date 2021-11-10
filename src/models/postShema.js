@@ -38,8 +38,9 @@ const postSchema = new Schema(
     comments: [
       {
         text: { type: String, required: true },
+        createdAt: { type: Date, enum: true, default: new Date() },
+        updatedAt: { type: Date, enum: true, default: new Date() },
       },
-      { timestamps: true },
     ],
   },
   {
