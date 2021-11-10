@@ -1,6 +1,15 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
+const comment = new Schema(
+  {
+    text: { type: String, required: true },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 const postSchema = new Schema(
   {
     category: { type: String },
@@ -35,13 +44,9 @@ const postSchema = new Schema(
       },
     },
     content: { type: String },
-    comments: [
-      {
-        text: { type: String, required: true },
-        createdAt: { type: Date, enum: true, default: new Date() },
-        updatedAt: { type: Date, enum: true, default: new Date() },
-      },
-    ],
+    comments: {
+      type: [comment],
+    },
   },
   {
     timestamps: true, // adds and manage createdAt and updatedAt fields
