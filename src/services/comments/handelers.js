@@ -3,6 +3,15 @@ import createHttpError from "http-errors";
 
 const getComments = async (req, res, next) => {
   try {
+    const post = await PostModel.findById(req.params.postId);
+
+    if (post) {
+      res.send(post.comments);
+    } else {
+      next(
+        createHttpError(404, `Post with id ${req.params.postId} not found!`)
+      );
+    }
   } catch (error) {
     console.log(error);
     next(error);
