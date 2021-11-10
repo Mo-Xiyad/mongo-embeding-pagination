@@ -62,7 +62,6 @@ const getCommentsById = async (req, res, next) => {
         );
       }
     } else {
-      console.log(error);
       next(
         createHttpError(404, `Post with id ${req.params.postId} not found!`)
       );
@@ -74,6 +73,30 @@ const getCommentsById = async (req, res, next) => {
 };
 const updateCommentsById = async (req, res, next) => {
   try {
+    const post = await PostModel.findById(req.params.postId);
+    if (post) {
+      const commentIndex = post.comments.findIndex(
+        (comment) => comment._id.toString() === req.params.commentId
+      );
+
+      if (commentIndex !== -1) {
+        post.comments[commentIndex] = {
+          ...post.comments[commentIndex].toObject(),
+          ...req.body,
+        };
+
+        await post.save();
+        res.status(200).send(post.comments[commentIndex]);
+      } else {
+        next(
+          createHttpError(404, `Post with id ${req.params.postId} not found!`)
+        );
+      }
+    } else {
+      next(
+        createHttpError(404, `Post with id ${req.params.postId} not found!`)
+      );
+    }
   } catch (error) {
     console.log(error);
     next(error);
