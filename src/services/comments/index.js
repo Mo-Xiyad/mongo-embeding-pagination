@@ -21,7 +21,6 @@ router
   .put(Handler.updatePostsById)
   .delete(Handler.deletePostsById);
 
-// upload post Image
 router.put(
   "/:postId/uploadImage",
   multer({ storage: cloudinaryStorage }).single("cover"),
