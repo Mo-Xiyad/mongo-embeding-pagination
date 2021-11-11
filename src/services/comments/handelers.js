@@ -13,7 +13,7 @@ q2m translates something like /books?limit=5&sort=-price&offset=15&price<10&cate
 const getComments = async (req, res, next) => {
   try {
     const mongoQuery = q2m(req.query);
-    console.log(mongoQuery);
+    // console.log(mongoQuery);
     const post = await PostModel.findById(req.params.postId);
     if (post) {
       res.send({

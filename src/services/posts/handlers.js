@@ -12,7 +12,7 @@ const getPosts = async (req, res, next) => {
   try {
     // {{local}}/posts?limit=2&offset=2 URL
     const mongoQuery = q2m(req.query);
-    console.log(mongoQuery);
+    // console.log(mongoQuery);
     const totalPosts = await PostModel.countDocuments(mongoQuery.criteria);
     const post = await PostModel.find(mongoQuery.criteria)
       .limit(mongoQuery.options.limit)
