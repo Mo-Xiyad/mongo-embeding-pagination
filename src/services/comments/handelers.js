@@ -20,9 +20,9 @@ const getComments = async (req, res, next) => {
 const createComments = async (req, res, next) => {
   try {
     // 1. Find the post in the Posts Collection by id
-    const postToCommet = await PostModel.findById(req.params.postId);
+    const postToComment = await PostModel.findById(req.params.postId);
 
-    if (postToCommet) {
+    if (postToComment) {
       const postToInsert = {
         ...req.body,
       };
@@ -104,6 +104,18 @@ const updateCommentsById = async (req, res, next) => {
 };
 const deleteCommentsById = async (req, res, next) => {
   try {
+    const commentToDelete = await PostModel.findByIdAndUpdate(
+      req.params.postId,
+      { $pull: { comments: { _id: req.params.commentId } } },
+      { new: true }
+    );
+    if (commentToDelete) {
+      res.status(200).send("deleted successfully");
+    } else {
+      next(
+        createHttpError(404, `Post with id ${req.params.postId} not found!`)
+      );
+    }
   } catch (error) {
     console.log(error);
     next(error);
