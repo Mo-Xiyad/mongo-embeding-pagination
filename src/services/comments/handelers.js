@@ -1,12 +1,24 @@
 import PostModel from "../../models/postShema.js";
 import createHttpError from "http-errors";
+import q2m from "query-to-mongo";
+
+/*
+q2m translates something like /books?limit=5&sort=-price&offset=15&price<10&category=fantasy into something that could be directly usable by mongo like
+{
+  criteria: { price: { '$lt': 10 }, category: 'fantasy' },
+  options: { sort: { price: -1 }, skip: 15, limit: 5 }
+}
+*/
 
 const getComments = async (req, res, next) => {
   try {
+    const mongoQuery = q2m(req.query);
+    console.log(mongoQuery);
     const post = await PostModel.findById(req.params.postId);
-
     if (post) {
-      res.send(post.comments);
+      res.send({
+        comments: post.comments,
+      });
     } else {
       next(
         createHttpError(404, `Post with id ${req.params.postId} not found!`)
